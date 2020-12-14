@@ -78,7 +78,7 @@ public class OpenNoteCameraView extends JavaCameraView implements PictureCallbac
     private Boolean saveOnDevice = false;
     private View blinkView = null;
     private View mView = null;
-    private boolean manualCapture = false;
+    private boolean manualCapture = true;
 
     private static OpenNoteCameraView mThis;
 
