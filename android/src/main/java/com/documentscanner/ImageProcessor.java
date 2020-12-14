@@ -50,7 +50,8 @@ public class ImageProcessor extends Handler {
     private int numOfRectangles = 10;
     private double lastCaptureTime = 0;
     private double durationBetweenCaptures = 0;
-
+    private boolean manualCapture = true;
+    
     public ImageProcessor(Looper looper, OpenNoteCameraView mainActivity, Context context) {
         super(looper);
         this.mMainActivity = mainActivity;
@@ -87,7 +88,9 @@ public class ImageProcessor extends Handler {
 
             if (command.equals("previewFrame")) {
                 processPreviewFrame((PreviewFrame) obj.getObj());
-            } else if (command.equals("pictureTaken")) {
+             } else if(command.equals("previewFrame1")) {
+                 processPreviewFrame1((PreviewFrame) obj.getObj());
+             } else if (command.equals("pictureTaken")) {
                 processPicture((Mat) obj.getObj());
             }
         }
@@ -116,6 +119,29 @@ public class ImageProcessor extends Handler {
         mMainActivity.setImageProcessorBusy(false);
 
     }
+    
+    
+    private void processPreviewFrame1(PreviewFrame previewFrame) {
+
+          Mat frame = previewFrame.getFrame();
+
+          boolean focused = mMainActivity.isFocused();
+
+          if (detectPreviewDocument(frame) && focused) {
+             numOfSquares++;
+             double now = (double)(new Date()).getTime() / 1000.0;
+             if (numOfSquares == numOfRectangles && now > lastCaptureTime + durationBetweenCaptures) {
+                 lastCaptureTime = now;
+                 numOfSquares = 0;
+             }
+         } else {
+             numOfSquares = 0;
+         }
+
+          frame.release();
+         mMainActivity.setImageProcessorBusy(false);
+
+      }
 
     private void processPicture(Mat picture) {
 
