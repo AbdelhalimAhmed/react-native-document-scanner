@@ -554,7 +554,7 @@ public class OpenNoteCameraView extends JavaCameraView implements PictureCallbac
                             if (success) {
                                 takePicture();
                             } else {
-                                onPictureFailed();
+                                takePicture();
                             }
                         }
                     });
